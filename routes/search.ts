@@ -20,8 +20,18 @@ export function searchProducts () {
   return (req: Request, res: Response, next: NextFunction) => {
     let criteria: any = req.query.q === 'undefined' ? '' : req.query.q ?? ''
     criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)
-    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`) // vuln-code-snippet vuln-line unionSqlInjectionChallenge dbSchemaChallenge
-      .then(([products]: any) => {
+
+    // Використовуємо параметризований запит замість конкатенації рядків, щоб запобігти SQL injection
+    models.sequelize.query(
+      'SELECT * FROM Products WHERE ((name LIKE :search OR description LIKE :search) AND deletedAt IS NULL) ORDER BY name',
+      {
+        replacements: { search: `%${criteria}%` },
+        // Використовуємо опцію type для отримання масиву рядків напряму
+        // Якщо ваші typings/інстанс sequelize вимагає іншої форми — можна імплементувати через (models.sequelize as any).QueryTypes.SELECT
+        type: (models.sequelize as any).QueryTypes.SELECT
+      }
+    )
+      .then((products: any) => {
         const dataString = JSON.stringify(products)
         if (challengeUtils.notSolved(challenges.unionSqlInjectionChallenge)) { // vuln-code-snippet hide-start
           let solved = true
