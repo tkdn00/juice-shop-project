@@ -192,7 +192,13 @@ export const updateAuthenticatedUsers = () => (req: Request, res: Response, next
       if (err === null) {
         if (authenticatedUsers.get(token) === undefined) {
           authenticatedUsers.put(token, decoded)
-          res.cookie('token', token)
+          // Безпечне встановлення cookie з опціями для захисту
+          res.cookie('token', token, {
+            httpOnly: true,       // не доступне з JavaScript
+            secure: true,         // передається лише по HTTPS
+            sameSite: 'Strict',   // мінімізує CSRF
+            maxAge: 6 * 60 * 60 * 1000 // 6 годин (збігається з expiresIn токена)
+          })
         }
       }
     })
