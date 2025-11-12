@@ -144,15 +144,15 @@
     id: 1
     answer: 'azjTLprq2im6p86RbFrA41L'
 -
-  email: wurstbrot
-  username: wurstbrot
-  password: 'EinBelegtesBrotMitSchinkenSCHINKEN!'
-  totpSecret: IFTXE3SPOEYVURT2MRYGI52TKJ4HC3KH
-  key: timo
-  role: 'admin'
-  securityQuestion:
-    id: 1
-    answer: 'NZMJLjEinU7TFElDIYW8'
+    email: wurstbrot
+    username: wurstbrot
+    passwordHash: '$2b$12$hQeDgZ3MQ6zFPjZcGxM5HuL1qzA6/Z6g4hPVUJCOFQ2Xn1P4aA/ae'
+    totpSecretRef: 'env:WURSTBROT_TOTP_SECRET'
+    key: timo
+    role: 'admin'
+    securityQuestion:
+      id: 1
+      answerRef: 'env:WURSTBROT_SEC_ANSWER'
 -
   email: amy
   password: 'K1f.....................'
