@@ -29,13 +29,18 @@
         </mat-form-field>
 
         <mat-form-field color="accent" appearance="outline">
-          <mat-label translate>LABEL_PASSWORD</mat-label>
-          <input id="password" #password name="password"
-            [formControl]="passwordControl"
-            (focus)="this.error=null"
-            matInput placeholder="" [type]="hide ? 'password' : 'text'"
-            aria-label="Text field for the login password"
-          >
+              <mat-label translate>LABEL_PASSWORD</mat-label>
+              <input
+                      id="password"
+                      name="password"
+                      [formControl]="passwordControl"
+                      (focus)="this.error = null"
+                      matInput
+                      placeholder=""
+                      type="password"
+                      aria-label="Password field for login">
+              <mat-error *ngIf="passwordControl.invalid" translate>MANDATORY_PASSWORD</mat-error>
+          </mat-form-field> 
           @if (hide) {
           <button mat-icon-button matSuffix (click)="hide = !hide" aria-label="Button to display the password"
             matTooltip="{{ 'SHOW_PWD_TOOLTIP' | translate  }}" matTooltipPosition=right>
