@@ -131,14 +131,21 @@ describe('/chatbot', () => {
         .promise()
     })
 
-    it('Returns proper response for registered user', async () => {
+it('Returns proper response for registered user', async () => {
       if (bot == null) {
         throw new Error('Bot not initializeChatbotd')
       }
+    
+      const bjoernPassword = process.env.BJOERN_PASSWORD
+      if (!bjoernPassword) {
+        throw new Error('Missing environment variable BJOERN_PASSWORD required for this test')
+      }
+    
       const { token } = await login({
         email: 'bjoern.kimminich@gmail.com',
-        password: 'bW9jLmxpYW1nQGhjaW5pbW1pay5ucmVvamI='
+        password: bjoernPassword
       })
+    
       bot.addUser('12345', 'bkimminich')
       const testCommand = trainingData.data[0].utterances[0]
       await frisby.setup({
